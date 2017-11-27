@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Game",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "turn": {
+      "type": "string",
+      "enum": ["North", "East", "South", "West"]
+    },
+    "players": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [{ "$ref": "#/definitions/player" }]
+      },
+      "minLength": 3,
+      "maxLength": 4
+    },
+    "resources": {
+      "type": "object",
+      "allOf": [{ "$ref": "#/definitions/gems" }, { "$ref": "#/definitions/gold" }]
+    },
+    "nobles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [{ "$ref": "#/definitions/noble" }]
+      }
+    },
+    "row1": {
+      "type": "object",
+      "oneOf": [{ "$ref": "#/definitions/row" }]
+    },
+    "row2": {
+      "type": "object",
+      "oneOf": [{ "$ref": "#/definitions/row" }]
+    },
+    "row3": {
+      "type": "object",
+      "oneOf": [{ "$ref": "#/definitions/row" }]
+    }
+  },
+  "required": ["id", "turn", "players", "resources", "nobles", "row1", "row2", "row3"],
+  "definitions": {
+    "row": {
+      "type": "object",
+      "properties": {
+        "hidden": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [{ "$ref": "#/definitions/card" }]
+          }
+        },
+        "revealed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [{ "$ref": "#/definitions/card" }],
+            "maxLength": 4
+          }
+        }
+      },
+      "required": ["hidden", "revealed"]
+    },
+    "player": {
+      "properties": {
+        "position": {
+          "type": "string",
+          "enum": ["North", "East", "South", "West"]
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [{ "$ref": "#/definitions/card" }]
+          }
+        },
+        "reserved": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [{ "$ref": "#/definitions/card" }]
+          }
+        },
+        "nobles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "oneOf": [{ "$ref": "#/definitions/noble" }]
+          }
+        },
+        "resources": {
+          "type": "object",
+          "allOf": [{ "$ref": "#/definitions/gems" }, { "$ref": "#/definitions/gold" }]
+        }
+      },
+      "required": ["position", "cards", "reserved", "nobles", "resources"],
+      "additionalProperties": false
+    },
+    "card": {
+      "type": "object",
+      "properties": {
+        "gems": {
+          "type": "object",
+          "oneOf": [{ "$ref": "#/definitions/gems" }]
+        },
+        "points": {
+          "type": "integer"
+        },
+        "color": {
+          "type": "string",
+          "enum": ["black", "blue", "green", "red", "white"]
+        }
+      },
+      "required": ["gems", "points", "color"]
+    },
+    "noble": {
+      "type": "object",
+      "properties": {
+        "requirements": {
+          "type": "array",
+          "oneOf": [{ "$ref": "#/definitions/requirement" }]
+        }
+      },
+      "required": ["requirements"]
+    },
+    "requirement": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string",
+          "enum": ["black", "blue", "green", "red", "white"]
+        },
+        "count": {
+          "type": "integer"
+        }
+      },
+      "required": ["color", "count"]
+    },
+    "gold": {
+      "type": "object",
+      "properties": {
+        "gold": {
+          "type": "integer"
+        }
+      },
+      "required": ["gold"]
+    },
+    "gems": {
+      "type": "object",
+      "properties": {
+        "black": {
+          "type": "integer"
+        },
+        "blue": {
+          "type": "integer"
+        },
+        "green": {
+          "type": "integer"
+        },
+        "red": {
+          "type": "integer"
+        },
+        "white": {
+          "type": "integer"
+        }
+      },
+      "required": ["black", "blue", "green", "red", "white"]
+    }
+  }
+}
